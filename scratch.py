@@ -17,24 +17,37 @@ class Scratch:
 	def __init__(self, host='localhost'):
 		self.host= host
 		self.port = 42001
-		self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-		self.connect()
+		self.connect(poll=True)
 		self.connected = 1
-	def connect(self):
-		try:
-                	self.connection.connect((self.host, self.port))
-        	except socket.error as (err, message):
-				if err == errno.ECONNREFUSED:
-					raise ScratchConnectionRefused('Connection refused, try enabling remote sensor connections')
-				elif err == errno.EISCONN:
+
+	def connect(self, poll=False):
+		"""
+		Creates a connection to the Scratch environment. If poll is True, blocks until
+		Scratch is running, and listening for connections on port 42001, else connect()
+		raises appropiate exceptions.
+		"""
+		while True:
+			try:
+				# create the socket here not in __init__() to avoid errno 22 invalid argument
+				self.connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+				self.connection.connect((self.host, self.port))
+			except socket.error as (err, message):
+				if err == errno.EISCONN:
 					raise ScratchConnectionEstablished('Already connected to Scratch')
+				elif poll == True:
+					continue
+				elif err == errno.ECONNREFUSED:
+					raise ScratchConnectionRefused('Connection refused, try enabling remote sensor connections')
 				else:
 					print(err, message)
 					raise ScratchConnectionError(message)
+			break
 		self.connected = 1
+
 	def disconnect(self):
 		self.connection.close()
 		self.connected = 0
+
 	def send(self, message):
 		#credit to chalkmarrow from scratch.mit.edu
 		n = len(message)
@@ -50,6 +63,7 @@ class Scratch:
 				raise ScratchConnectionError(message)
 		else:
 			raise ScratchConnectionError('Not connected to Scratch')
+
 	def sensorupdate(self, data):
 		"""Takes a dictionary and writes a message using the keys as sensors, and the values as the update values"""
 		if not isinstance(data, dict):
@@ -58,6 +72,7 @@ class Scratch:
 		for key in data.keys():
 			message = message+' "'+key+'" '+data[key]
 		self.send(message)
+
 	def broadcast(self, data):
 		"""Takes a list of message strings and writes a broadcast message to scratch"""
 		if not isinstance(data, list):
@@ -66,8 +81,10 @@ class Scratch:
 		for mess in data:
 			message = message+' "'+mess+'"'
 		self.send(message)
+
 	def parse_message(self, message):
 		#TODO: parse sensorupdates with quotes in sensor names and values
+		#	   make more readable
 		if message:
 			sensorupdate_re = 'sensor-update[ ](((?:\").[^\"]*(?:\"))[ ](?:\"|)(.[^\"]*)(?:\"|)[ ])+'
 			broadcast_re = 'broadcast[ ]\".[^"]*\"'
@@ -87,7 +104,8 @@ class Scratch:
 						if sensorupdates[i][-1] != '\"':
 							j = i
 							multisense = ''
-							#now loop through each word in list and find the word that ends with " which is the end of the variable name
+							#now loop through each word in list and find the word 
+							#that ends with " which is the end of the variable name
 							while j < len(sensorupdates):
 								multisense = multisense+' '+sensorupdates[j]
 								if sensorupdates[j][-1] == '\"':
@@ -114,32 +132,31 @@ class Scratch:
 			return dict([('sensor-update', sensors), ('broadcast', broadcast)])
 		else: 
 			return None
+
 	def receive(self, noparse=0):
 		""" Receives data from Scratch
 		Arguments:
-			Optional:
-				noparse -- 0 to pass message through a parser and return the message as a data structure
-					   1 to not parse message, but format as a string
-					   2 to not parse message and not format as a string (returns raw message)
+			noparse: 0 to pass message through a parser and return the message as a data structure
+				 	 1 to not parse message, but format as a string
+				  	 2 to not parse message and not format as a string (returns raw message)
 		"""
-					
-                try:
-                        mess = self.connection.recv(1024)
-                except socket.error as (errno, message):
-                        if errno == 107 or 9:
-                                raise ScratchConnectionError(errno, 'A connection must first be made to Scratch with Scratch.connect()')
-                        else:
-                                raise ScratchConnectionError(errno, message)
+		try:
+			mess = self.connection.recv(1024)
+		except socket.error as (errno, message):
+			raise ScratchConnectionError(errno, message)
+		if not mess:
+			return None
 		if noparse == 0:
 			return self.parse_message(repr(mess))
-                if noparse == 1:
+		if noparse == 1:
 			return repr(mess)
 		elif noparse == 2:
-                        return mess
+			return mess
 		else:
 			return self.parse_message(repr(mess))
 
 if __name__ == "__main__":
+	#runs and prints out raw messages received from Scratch
 	try:
 		s = Scratch()
 	except ScratchConnectionError, e:
