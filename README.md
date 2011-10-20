@@ -10,10 +10,12 @@ A Python connection class for [Scratch](scratch.mit.edu)
 
 3. Create a variable `foo`
 
-	>>> import scratch
- 	>>> s = scratch.Scratch(host='localhost')
-	>>> s.broadcast(["Hello, Scratch!"])
-	>>> s.receive()
-	{'broadcast': [], 'sensor-update': {'foo': '0'}}
-	>>> 
+```
+>>> import scratch
+>>> s = scratch.Scratch(host='localhost')
+>>> s.broadcast(["Hello, Scratch!"])
+>>> s.receive()
+{'broadcast': [], 'sensor-update': {'foo': '0'}}
+>>> 
+```
 
