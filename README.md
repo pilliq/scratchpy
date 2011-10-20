@@ -1,14 +1,14 @@
 # scratchpy
 
-A Python connection class for Scratch (scratch.mit.edu)
+A Python connection class for [Scratch](scratch.mit.edu)
 
 ## Getting Started
 
-Start up Scratch
+1. Start up Scratch
 
-Enable remote sensor connections
+2. Enable remote sensor connections
 
-Create a variable named 'foo'
+3. Create a variable `foo`
 
 	>>> import scratch
  	>>> s = scratch.Scratch(host='localhost')
@@ -17,6 +17,3 @@ Create a variable named 'foo'
 	{'broadcast': [], 'sensor-update': {'foo': '0'}}
 	>>> 
 
-## ToDo
-Parse messages that contain quotes (")
-Clean up message parsing
