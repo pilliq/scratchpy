@@ -70,7 +70,7 @@ class Scratch:
 			raise TypeError('Expected a dict')
 		message = 'sensor-update'
 		for key in data.keys():
-			message = message+' "'+key+'" '+data[key]
+			message = message+' "'+key+'" '+str(data[key])
 		self.send(message)
 
 	def broadcast(self, data):
