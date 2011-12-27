@@ -70,17 +70,18 @@ class Scratch:
 			raise TypeError('Expected a dict')
 		message = 'sensor-update'
 		for key in data.keys():
-			message = message+' "'+key+'" '+str(data[key])
+			message = message+' "'+str(key)+'" '+str(data[key])
 		self.send(message)
 
 	def broadcast(self, data):
 		"""Takes a list of message strings and writes a broadcast message to scratch"""
-		if not isinstance(data, list):
-			raise TypeError('Expected a list')
 		message = 'broadcast'
-		for mess in data:
-			message = message+' "'+mess+'"'
-		self.send(message)
+		if isinstance(data, list):
+		    for mess in data:
+			    message = message+' "'+str(mess)+'"'
+		    self.send(message)
+		else:
+		    self.send(message+' "'+str(data)+'"')
 
 	def parse_message(self, message):
 		#TODO: parse sensorupdates with quotes in sensor names and values
