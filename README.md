@@ -6,16 +6,15 @@ A Python connection class for [Scratch](scratch.mit.edu)
 
 1. Start up Scratch
 
-2. Enable remote sensor connections
+2. Enable remote sensor connections, or "Host Mesh" in [BYOB](http://byob.berkeley.edu/)
 
 3. Create a variable `foo`
 
 ```
 >>> import scratch
 >>> s = scratch.Scratch(host='localhost')
->>> s.broadcast(["Hello, Scratch!"])
+>>> s.broadcast("Hello, Scratch!")
 >>> s.receive()
 {'broadcast': [], 'sensor-update': {'foo': '0'}}
 >>> 
 ```
-
