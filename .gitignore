@@ -1,4 +1,4 @@
 *.pyc
 build/
 dist/
-scratch.egg-info/
+scratchpy.egg-info/
