@@ -1,0 +1,8 @@
+v0.1.0
+    - Corrected reading and writing to sockets
+    - Corrected parsing of messages from Scratch
+    - receive() now returns one message as a tuple with the first element being
+      the message type and the second element the message data
+    - connect() no longer polls for a connection to Scratch
+    - Simplified exception classes to ScratchError and ScratchConnectionError
+    - Packaged and uploaded to PyPI
