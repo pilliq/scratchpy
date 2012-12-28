@@ -43,7 +43,7 @@ the project directory and run
 ### Connecting 
 Constructing a new `Scratch` object will automatically connect to Scratch
 
-```
+```python
 import scratch
 s = scratch.Scratch()
 ```
@@ -52,13 +52,13 @@ This will create a connection on `localhost` port 42001 and set `s.connected`
 to `True`. If you want to change the host or port, you can provide them to the 
 constructor
 
-```
+```python
 s = scratch.Scratch(host='0.0.0.0', port=40000) 
 ```
 
 If you are disconnected, you can reconnect using the `connect` method
 
-```
+```python
 s.connect()
 ```
 
@@ -66,13 +66,13 @@ s.connect()
 Broadcasting messages to Scratch will function like a broadcast block in 
 Scratch. You can broadcast either a single message
 
-```
+```python
 s.broadcast('Hello, Scratch!')
 ```
 
 Or a list of messages
 
-```
+```python
 s.broadcast(['Hello, Scratch!', 'How are you doing?'])
 ```
 
@@ -84,14 +84,14 @@ Sending sensor updates to Scratch will create new sensors in the Sensing
 category, or update sensors with new values. The `sensorupdate` method accepts 
 a dict whose keys are sensor names, and values are sensor values. 
 
-```
+```python
 s.sensorupdate({'temperature' : 75})
 ```
 
 ### Receiving
 Use the `receive` method to receive messages from Scratch
 
-```
+```python
 msg = s.receive()
 ```
 
@@ -111,7 +111,7 @@ Broadcast messages are received anytime a broadcast block is executed in
 Scratch. The message data is a string of the message that was broadcast. An 
 example broadcast message returned from `receive` looks like this:
 
-```
+```python
 ('broadcast', 'Hello, Python!')
 ```
 
@@ -122,7 +122,7 @@ dict that maps global variable names to their values. Suppose you created two
 variables, `foo` and `bar`. Upon their creation, `receive` would return a 
 message that looks like this:
 
-```
+```python
 ('sensor-update', {'foo': 0, 'bar': 0})
 ```
 
@@ -133,23 +133,23 @@ receive all the messages from Scratch you must repeatedly call `receive`. A
 nice way to handle this is to have a generator function that yields a message 
 everytime it receives, and exits on error. 
 
-```
+```python
 def listen():
     while True:
-	try:
-	    yield s.receive()
-	except scratch.ScratchError:
-	    raise StopIteration
+		try:
+		   yield s.receive()
+		except scratch.ScratchError:
+		   raise StopIteration
 ```
 
 Now you can iterate over all the messages from Scratch
 
-```
+```python
 for msg in listen():
     if msg[0] == 'broadcast':
-	# code to handle broadcasts
+		# code to handle broadcasts
     elif msg[0] == 'sensor-update':
-	# code to handle sensor updates
+		# code to handle sensor updates
 ```
 
 If an error occurs or the connection to Scratch is closed, Python simply exits 
@@ -158,7 +158,7 @@ the loop.
 ### Disconnecting
 To close a connection to Scratch
 
-```
+```python
 s.disconnect()
 ```
 
