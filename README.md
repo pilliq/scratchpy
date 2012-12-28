@@ -1,6 +1,6 @@
 # scratchpy
 
-A Python client for [Scratch](scratch.mit.edu)
+A Python client for [Scratch](http://scratch.mit.edu)
 
 ## Getting Started
 

@@ -1,5 +1,4 @@
 import array
-import errno
 import itertools
 import socket
 import struct
