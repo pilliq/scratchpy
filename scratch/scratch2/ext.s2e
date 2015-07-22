@@ -1,0 +1,10 @@
+{
+    "extensionName": "Example",
+    "extensionPort": 23001,
+    "blockSpecs": [
+        [" ", "beep", "playBeep", 3],
+        [" ", "beep", "playBeep"],
+        [" ", "set beep volume to %n %n %n", "setVolume", 5, 100],
+        [" ", "set beep volume to %n %n %n", "setVolume", 5, 100]
+    ]
+}

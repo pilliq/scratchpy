@@ -3,6 +3,7 @@ import itertools
 import socket
 import struct
 
+from .exceptions import ScratchError, ScratchConnectionError
 class ScratchError(Exception): pass
 class ScratchConnectionError(ScratchError): pass	
 

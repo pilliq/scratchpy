@@ -1,0 +1,30 @@
+Scratch 2
+
+Want
+    Writing extension files
+        could provide a downlaod link on custom webpage of extension
+    Reading extension files
+        could read extension files from external resources instead of only files (e.g. http:// resources)
+
+
+
+** For python 2 and 3 support, could use a compat file like requests.py
+
+Questions:
+    do blocks need unique names (operation/remote variable names)?
+        it doesn't seem like it. two exactly the same blocks are 
+    figure out how default params are matched up for blocks
+
+Scratch notes:
+    Blocks/block names are not unique. You can have two of exactly the same blocks
+    Extension names are unique. importing an extension with same name and different blocks or port numbers will update the already imported extension
+
+
+
+Routes: (Note: all free-form strings should be URL encoded)
+    /poll - retrieve sensor values and status info
+    /reset_all - sent when stop button is clicked; should rest hardware to its power-up state
+    /crossdomain.xml - return a null-terminated policy file
+    /<command>/<arg1>/<arg2>/... - command with optional args
+    /<command>/<command_id>/<arg1>/<arg2>/... - wait command with optional args
+
